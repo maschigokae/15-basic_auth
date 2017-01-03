@@ -1,0 +1,42 @@
+{
+  "name": "tableaux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "DEBUG='tableaux*' mocha",
+    "start": "DEBUG='tableaux*' node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maschigokae/15-basic_auth.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maschigokae/15-basic_auth/issues"
+  },
+  "homepage": "https://github.com/maschigokae/15-basic_auth#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "bluebird": "^3.4.7",
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
+    "debug": "^2.6.0",
+    "dotenv": "^2.0.0",
+    "express": "^4.14.0",
+    "http-errors": "^1.5.1",
+    "jsonwebtoken": "^7.2.1",
+    "mongoose": "^4.7.6",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-mocha": "^3.0.1",
+    "mocha": "^3.2.0",
+    "superagent": "^3.3.1"
+  }
+}
