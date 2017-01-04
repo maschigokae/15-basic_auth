@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const debug = require('debug')('tableaux:server');
 
+const errors = require('./lib/error-middleware.js');
+
 dotenv.load();
 
 const PORT = process.env.PORT;
