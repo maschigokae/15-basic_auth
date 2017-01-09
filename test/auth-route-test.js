@@ -14,8 +14,13 @@ const url = `http://localhost:${process.env.PORT}`;
 
 const exampleUser = {
   username: 'testuser',
-  password: 'testing1234',
-  email: 'testuser@testsite.com'
+  email: 'testuser@testsite.com',
+  password: 'testing1234'
+};
+
+const exampleUserWithoutCustomUsername = {
+  email: 'testuser@testsite.com',
+  password: 'testing1234'
 };
 
 const invalidUser = {
@@ -25,7 +30,7 @@ const invalidUser = {
 
 describe('Auth Routes', function() {
   describe('POST: /api/register', function() {
-    describe('with a valid body', function() {
+    describe('with a valid body (custom username set)', function() {
       after( done => {
         User.remove({})
         .then( () => done())
@@ -35,6 +40,25 @@ describe('Auth Routes', function() {
       it('should return a token', done => {
         request.post(`${url}/api/register`)
         .send(exampleUser)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.text).to.be.a('string');
+          done();
+        });
+      });
+    });
+
+    describe('with a valid body (username default to email)', function() {
+      after( done => {
+        User.remove({})
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a token', done => {
+        request.post(`${url}/api/register`)
+        .send(exampleUserWithoutCustomUsername)
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).to.equal(200);
@@ -82,7 +106,7 @@ describe('Auth Routes', function() {
   });
 
   describe('GET: /api/login', function() {
-    describe('with a valid body', function() {
+    describe('with a valid body (custom username set)', function() {
       before( done => {
         let user = new User(exampleUser);
         user.generatePasswordHash(exampleUser.password)
@@ -103,6 +127,35 @@ describe('Auth Routes', function() {
       it('should return a token', done => {
         request.get(`${url}/api/login`)
         .auth('testuser', 'testing1234')
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          done();
+        });
+      });
+    });
+
+    describe('with a valid body (username default to email)', function() {
+      before( done => {
+        let user = new User(exampleUserWithoutCustomUsername);
+        user.generatePasswordHash(exampleUserWithoutCustomUsername.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        User.remove({})
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should return a token', done => {
+        request.get(`${url}/api/login`)
+        .auth('testuser@testsite.com', 'testing1234')
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).to.equal(200);
