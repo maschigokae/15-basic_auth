@@ -3,6 +3,7 @@
 const parseJSON = require('body-parser').json();
 const debug = require('debug')('tableaux:auth-router');
 const Router = require('express').Router;
+const createError = require('http-errors');
 const basicAuth = require('../lib/basic-auth-middleware.js');
 
 const User = require('../model/user.js');
@@ -11,6 +12,10 @@ const authRouter = module.exports = Router();
 
 authRouter.post('/api/register', parseJSON, function(req, res, next) {
   debug('POST: /api/register');
+
+  if (!req.body.username) return next(createError(400, 'Bad Request'));
+  if (!req.body.password) return next(createError(400, 'Bad Request'));
+  if (!req.body.email) return next(createError(400, 'Bad Request'));
 
   let password = req.body.password;
   delete req.body.password;
