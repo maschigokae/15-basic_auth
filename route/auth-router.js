@@ -13,7 +13,6 @@ const authRouter = module.exports = Router();
 authRouter.post('/api/register', parseJSON, function(req, res, next) {
   debug('POST: /api/register');
 
-  if (!req.body.username) return next(createError(400, 'Bad Request'));
   if (!req.body.password) return next(createError(400, 'Bad Request'));
   if (!req.body.email) return next(createError(400, 'Bad Request'));
 
