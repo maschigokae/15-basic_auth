@@ -67,6 +67,7 @@ describe('Auth Routes', function() {
         });
       });
     });
+
     describe('to an unregistered route', function() {
       it('should throw a 404 \'not found\' error', done => {
         request.post(`${url}/api/reg`)
@@ -140,7 +141,6 @@ describe('Auth Routes', function() {
     });
 
     describe('to an unregistered route', function() {
-
       it('should throw a 404 \'not found\' error', done => {
         request.get(`${url}/api/logon`)
         .auth('testuser', 'testing1234')
