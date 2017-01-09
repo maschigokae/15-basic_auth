@@ -11,10 +11,15 @@ const debug = require('debug')('tableaux:user');
 const Schema = mongoose.Schema;
 
 const userSchema = Schema({
-  username: { type: String, required: true, unique: true },
+  username: { type: String, unique: true },
   password: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   findHash: { type: String, unique: true }
+});
+
+userSchema.pre('save', function(next) {
+  if(!this.username) this.username = this.email;
+  next();
 });
 
 userSchema.methods.generatePasswordHash = function(pw) {
