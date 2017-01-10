@@ -164,6 +164,35 @@ describe('Auth Routes', function() {
       });
     });
 
+    describe('with an invalid username', function() {
+      before( done => {
+        let user = new User(exampleUser);
+        user.generatePasswordHash(exampleUser.password)
+        .then( user => user.save())
+        .then( user => {
+          this.tempUser = user;
+          done();
+        })
+        .catch(done);
+      });
+
+      after( done => {
+        User.remove({})
+        .then( () => done())
+        .catch(done);
+      });
+
+      it('should throw a 401 \'unauthorized\' error', done => {
+        request.get(`${url}/api/login`)
+        .auth('invalidusername', 'turtle123')
+        .end((err, res) => {
+          expect(res.status).to.equal(401);
+          expect(res.res.statusMessage).to.equal('Unauthorized');
+          done();
+        });
+      });
+    });
+
     describe('with an invalid password', function() {
       before( done => {
         let user = new User(exampleUser);
