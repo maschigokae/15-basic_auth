@@ -32,6 +32,12 @@ authRouter.get('/api/login', basicAuth, function(req, res, next) {
   debug('GET: /api/login');
 
   User.findOne({ username: req.auth.username })
+  .then( user => {
+    if (!user) return next(createError(401, 'Invalid Credentials'));
+  })
+  .catch(next);
+
+  User.findOne({ username: req.auth.username })
   .then( user => user.comparePasswordHash(req.auth.password))
   .then( user => user.generateToken())
   .then( token => res.send(token))
