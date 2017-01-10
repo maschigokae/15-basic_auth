@@ -34,8 +34,9 @@ You will need MongoDB installed locally. You will also need a command line http 
   * In the command line, making sure you're in the root directory of your local version of the API, install the necessary dependencies for running the app by typing `npm i`
   * In a **separate** window or pane of your command line interface, start MongoDB by typing `mongod`
   * Then, start the node server by typing `npm run start`
-  * Let's set up a user. In a **separate** window or pane of your command line interface (the first two are running the node server and MongoDB in the background), type `http POST localhost:8000/api/register`
-
-TODO: BUILD OUT MORE INSTRUCTIONS
+  * Let's set up a user. In a **separate** window or pane of your command line interface (the first two are running the node server and MongoDB in the background), type `http POST localhost:8000/api/register username="yourusername" password="yourpassword" email="youremail@example.com"`
+  * Let's make a login request. Type `http -a yourusername:yourpassword localhost:8000/api/login` If you get a 200 status code and an authorization token in the response log, you have successfully logged in!
+  * If you get a 401 error status, check to make sure your credentials are correct and that the request was formatted correctly (note the colon separating the username and password).
+  * COMING SOON: Photo uploading instructions!
 
 Thanks for using my API. Check back soon for updates and improvements!
