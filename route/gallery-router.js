@@ -12,7 +12,14 @@ const galleryRouter = module.exports = Router();
 
 // TODO: BUILD OUT GALLERY ROUTES
 
-galleryRouter.post('/api/gallery');
+galleryRouter.post('/api/gallery', bearerAuth, function(req, res, next) {
+  debug('POST: /api/gallery');
+
+  req.body.userID = req.user._id;
+  new Gallery(req.body).save()
+  .then( gallery => res.json(gallery))
+  .catch(next);
+});
 
 galleryRouter.get('/api/gallery/:id');
 
