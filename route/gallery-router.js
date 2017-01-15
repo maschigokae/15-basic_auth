@@ -21,7 +21,16 @@ galleryRouter.post('/api/gallery', bearerAuth, function(req, res, next) {
   .catch(next);
 });
 
-galleryRouter.get('/api/gallery/:id');
+galleryRouter.get('/api/gallery/:id', bearerAuth, function(req, res, next) {
+  debug('GET: /api/gallery/:id');
+
+  Gallery.findById(req.params.id)
+  .then( gallery => {
+    if (gallery.userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
+    res.json(gallery);
+  })
+  .catch(next);
+});
 
 galleryRouter.put('/api/gallery/:id');
 
