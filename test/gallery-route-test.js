@@ -197,7 +197,7 @@ describe('Gallery Routes (POST, GET)', function() {
   });
 });
 
-describe('Gallery Routes (PUT)', function() {
+describe('Gallery Routes (PUT, DELETE)', function() {
   afterEach( done => {
     Promise.all([
       User.remove({}),
@@ -286,6 +286,78 @@ describe('Gallery Routes (PUT)', function() {
       it('should return a 404 \'not found\' error', done => {
         request.put(`${url}/api/gallery/invalid-id`)
         .send(updatedGallery)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(404);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('DELETE: /api/gallery/:id', function() {
+    before( done => {
+      new User(exampleUser2)
+      .generatePasswordHash(exampleUser2.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
+
+    before( done => {
+      exampleGallery.userID = this.tempUser._id.toString();
+      new Gallery(exampleGallery).save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
+    });
+
+    after( () => {
+      delete exampleGallery.userID;
+    });
+
+    describe('with a valid id and vaild auth', () => {
+      it('should delete a gallery', done => {
+        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(204);
+          expect(res.res.statusMessage).to.equal('No Content');
+          expect(res.body).to.be.empty;
+          done();
+        });
+      });
+    });
+
+    describe('with a valid id and invaild auth', () => {
+      it('should return a 401 \'unauthorized\' error', done => {
+        request.delete(`${url}/api/gallery/${this.tempGallery._id}`)
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(401);
+          done();
+        });
+      });
+    });
+
+    describe('with a invalid id and vaild auth', () => {
+      it('should return a 404 \'not found\' error', done => {
+        request.delete(`${url}/api/gallery/invalid-id`)
         .set({
           Authorization: `Bearer ${this.tempToken}`
         })
