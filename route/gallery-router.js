@@ -13,7 +13,6 @@ const galleryRouter = module.exports = Router();
 galleryRouter.post('/api/gallery', bearerAuth, parseJSON, function(req, res, next) {
   debug('POST: /api/gallery');
 
-  console.log('REQUEST BODY', req.body);
   req.body.userID = req.user._id;
   new Gallery(req.body).save()
   .then( gallery => res.json(gallery))
