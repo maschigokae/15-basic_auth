@@ -108,3 +108,9 @@ tags
 ### Other ###
 
 .env
+
+16-bearer_auth.md
+
+17-aws_s3.md
+
+username-not-found-error.js
