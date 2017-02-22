@@ -195,7 +195,75 @@ describe('Gallery Routes (POST, GET)', function() {
       });
     });
   });
+
+  describe('GET: /api/gallery/', function() {
+    before( done => {
+      new User(exampleUser1)
+      .generatePasswordHash(exampleUser1.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
+
+    before( done => {
+      exampleGallery.userID = this.tempUser._id.toString();
+
+      new Gallery(exampleGallery)
+      .save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
+    });
+
+    after( () => {
+      delete exampleGallery.userID;
+    });
+
+    describe('with at least 1 gallery in the database', () => {
+      it('should return an array of gallery ids', done => {
+        request.get(`${url}/api/galleries`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(1);
+          expect(res.body[0]).to.equal(this.tempGallery._id.toString());
+          done();
+        });
+      });
+    });
+
+    describe('with no galleries in the database', () => {
+      it('should return a 416 \'range not satisfiable\' error', done => {
+        request.get(`${url}/api/galleries`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          expect(err).to.be.an('error');
+          expect(res.status).to.equal(416);
+          done();
+        });
+      });
+    });
+  });
 });
+
+
+// //////////////// ********** visual divider ********** ////////////////
+
 
 describe('Gallery Routes (PUT, DELETE)', function() {
   afterEach( done => {
