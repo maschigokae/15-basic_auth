@@ -36,22 +36,22 @@ describe('Gallery Routes', function() {
   });
 
   describe('POST: /api/gallery', function() {
-    describe('with a valid body', function() {
-      before( done => {
-        new User(exampleUser)
-        .generatePasswordHash(exampleUser.password)
-        .then( user => user.save())
-        .then( user => {
-          this.tempUser = user;
-          return user.generateToken();
-        })
-        .then( token => {
-          this.tempToken = token;
-          done();
-        })
-        .catch(done);
-      });
+    before( done => {
+      new User(exampleUser)
+      .generatePasswordHash(exampleUser.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
 
+    describe('with a valid body', () => {
       it('should return a gallery', done => {
         request.post(`${url}/api/gallery`)
         .send(exampleGallery)
@@ -105,6 +105,51 @@ describe('Gallery Routes', function() {
         .end((err, res) => {
           expect(err).to.be.an('error');
           expect(res.status).to.equal(400);
+          done();
+        });
+      });
+    });
+  });
+
+  describe('GET: /api/gallery/:id', function() {
+    before( done => {
+      new User(exampleUser)
+      .generatePasswordHash(exampleUser.password)
+      .then( user => user.save())
+      .then( user => {
+        this.tempUser = user;
+        return user.generateToken();
+      })
+      .then( token => {
+        this.tempToken = token;
+        done();
+      })
+      .catch(done);
+    });
+
+    before( done => {
+      exampleGallery.userID = this.tempUser._id.toString();
+
+      new Gallery(exampleGallery)
+      .save()
+      .then( gallery => {
+        this.tempGallery = gallery;
+        done();
+      })
+      .catch(done);
+    });
+
+    describe('with a valid body', () => {
+      it('should return a gallery', done => {
+        request.get(`${url}/api/gallery/${this.tempGallery._id}`)
+        .set({
+          Authorization: `Bearer ${this.tempToken}`
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.status).to.equal(200);
+          expect(res.body.galleryName).to.equal(exampleGallery.galleryName);
+          expect(res.body.description).to.equal('test gallery description');
           done();
         });
       });
