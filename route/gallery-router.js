@@ -10,11 +10,10 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 const galleryRouter = module.exports = Router();
 
-// TODO: BUILD OUT GALLERY ROUTES
-
 galleryRouter.post('/api/gallery', bearerAuth, parseJSON, function(req, res, next) {
   debug('POST: /api/gallery');
 
+  console.log('REQUEST BODY', req.body);
   req.body.userID = req.user._id;
   new Gallery(req.body).save()
   .then( gallery => res.json(gallery))
@@ -29,6 +28,18 @@ galleryRouter.get('/api/gallery/:id', bearerAuth, function(req, res, next) {
     if (gallery === null) return next(createError(404, 'not found'));
     if (gallery.userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
     res.json(gallery);
+  })
+  .catch(next);
+});
+
+galleryRouter.get('/api/galleries/', bearerAuth, function(req, res, next) {
+  debug('GET: /api/gallery/');
+
+  Gallery.find({})
+  .then( galleries => {
+    if (galleries.length === 0) return Promise.reject(createError(416, 'Out of range'));
+    if (galleries[0].userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
+    res.json(galleries.map(gallery => gallery._id));
   })
   .catch(next);
 });
