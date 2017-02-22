@@ -45,7 +45,7 @@ You will need MongoDB installed locally. You will also need a command line http 
   * You should see your new gallery logged as a JSON object.
   * If you get a 401 error status, make sure you copy-pasted the token exactly, or try logging in again, which will give you a new token, and use the new token.
   * Let's view the gallery by making a GET request. Making sure you're still logged in and have an active token, type `http :8000/api/gallery/my-gallery-id "Authorization: Bearer my-token"` **NOTE: The my-gallery-id parameter in the url should be replaced with the id string for the gallery that was logged when it was first created.**
-  * Need to look up the ids for your galleries? Type `http :8000/api/galleries "Authorization:Bearer my-token"` ...this will return an array of gallery id strings, which you can copy-paste into GET requests for individual galleries.
+  * Need to look up the ids for your galleries? Type `http :8000/api/galleries "Authorization:Bearer my-token"` ...this will return an array of gallery id strings, which you can copy-paste into requests for individual galleries.
   * Need to update a gallery name or description? Type `http PUT :8000/api/gallery/my-gallery-id description="this description has been changed" "Authorization:Bearer my-token"` ...you can update name only, description only, or both in the same request.
   * Need to delete a gallery? Type `http DELETE :8000/api/gallery/my-gallery-id "Authorization:Bearer my-token"`
 
