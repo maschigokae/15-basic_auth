@@ -7,7 +7,7 @@ const AWS = require('aws-sdk');
 const multer = require('multer');
 const Router = require('express').Router;
 const createError = require('http-errors');
-const debug = require('debug')('cfgram:photo-router');
+const debug = require('debug')('tableaux:photo-router');
 
 const Photo = require('../model/photo.js');
 const Gallery = require('../model/gallery.js');
