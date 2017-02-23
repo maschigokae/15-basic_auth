@@ -35,10 +35,13 @@
     "multer": "^1.2.1"
   },
   "devDependencies": {
+    "aws-sdk-mock": "^1.6.1",
     "chai": "^3.5.0",
+    "coveralls": "^2.11.15",
     "gulp": "^3.9.1",
     "gulp-eslint": "^3.0.1",
     "gulp-mocha": "^3.0.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "superagent": "^3.3.1"
   }
