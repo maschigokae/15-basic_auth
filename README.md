@@ -50,8 +50,7 @@ You will need MongoDB installed locally. You will also need a command line http 
   * Need to delete a gallery? Type `http DELETE :8000/api/gallery/my-gallery-id "Authorization:Bearer my-token"`
 
 ### Uploading Photos
-  * COMING SOON: Photo uploading instructions!
-  * Let's add a new photo to a gallery we've created in the last step. **NOTE: This will require you to enter the filepath to your photo, relative to which directory you are in, in your terminal These examples assume you are on a Mac, in your user root, with a photo saved on the Desktop.**
+  * Let's add a new photo to a gallery we've created in the last step. **NOTE: This will require you to enter the filepath to your photo, relative to which directory you are in, in your terminal. This example assumes you are on a Mac, in your user root directory, with a photo saved on your Desktop.**
   * Type `http -f POST :8000/api/gallery/my-gallery-id/photo photoName="Dominica" description="Vacation in the Caribbean" image@~/Desktop/dominica.jpg "Authorization:Bearer my-token"`
   Want to see a list of your photo ids? Type `http :8000/api/photos "Authorization:Bearer my-token"`
   * Need to delete a photo? Type `http DELETE :8000/api/gallery/my-gallery-id/photo/my-photo-id "Authorization:Bearer my-token"`
