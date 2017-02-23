@@ -19,17 +19,20 @@
   },
   "homepage": "https://github.com/maschigokae/15-basic_auth#readme",
   "dependencies": {
+    "aws-sdk": "^2.7.21",
     "bcrypt": "^1.0.2",
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
     "cors": "^2.8.1",
     "debug": "^2.6.0",
+    "del": "^2.2.2",
     "dotenv": "^2.0.0",
     "express": "^4.14.0",
     "http-errors": "^1.5.1",
     "jsonwebtoken": "^7.2.1",
     "mongoose": "^4.7.6",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "multer": "^1.2.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
