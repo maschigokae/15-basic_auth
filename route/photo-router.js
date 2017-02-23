@@ -55,8 +55,8 @@ photoRouter.post('/api/gallery/:galleryID/photo', bearerAuth, upload.single('ima
   .then( s3data => {
     del([`${dataDir}/*`]);
     let photoData = {
-      name: req.body.name,
-      desc: req.body.desc,
+      photoName: req.body.photoName,
+      description: req.body.description,
       objectKey: s3data.Key,
       imageURI: s3data.Location,
       userID: req.user._id,
