@@ -28,6 +28,8 @@ app.use(galleryRouter);
 app.use(photoRouter);
 app.use(errors);
 
-app.listen(PORT, () => {
+const server = module.exports = app.listen(PORT, () => {
   debug(`SERVER RUNNING ON PORT ${PORT}`);
 });
+
+server.isRunning = true;
