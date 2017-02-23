@@ -10,6 +10,7 @@ const debug = require('debug')('tableaux:server');
 
 const authRouter = require('./route/auth-router.js');
 const galleryRouter = require('./route/gallery-router.js');
+const photoRouter = require('./route/photo-router.js');
 const errors = require('./lib/error-middleware.js');
 
 dotenv.load();
@@ -24,6 +25,7 @@ app.use(morgan('dev'));
 
 app.use(authRouter);
 app.use(galleryRouter);
+app.use(photoRouter);
 app.use(errors);
 
 app.listen(PORT, () => {
