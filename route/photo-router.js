@@ -74,7 +74,7 @@ photoRouter.get('/api/photos', bearerAuth, function(req, res, next) {
   Photo.find({})
   .then( photos => {
     if (photos.length === 0) return Promise.reject(createError(416, 'Out of range'));
-    if (photos[0].userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
+    if (photos[photos.length - 1].userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
     res.json(photos.map(photo => photo._id));
   })
   .catch(next);
