@@ -67,3 +67,40 @@ photoRouter.post('/api/gallery/:galleryID/photo', bearerAuth, upload.single('ima
   .then( photo => res.json(photo))
   .catch( err => next(err));
 });
+
+photoRouter.get('/api/photos', bearerAuth, function(req, res, next) {
+  debug('GET: /api/photos');
+
+  Photo.find({})
+  .then( photos => {
+    if (photos.length === 0) return Promise.reject(createError(416, 'Out of range'));
+    if (photos[0].userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
+    res.json(photos.map(photo => photo._id));
+  })
+  .catch(next);
+});
+
+photoRouter.delete('/api/gallery/:galleryID/photo/:photoID', bearerAuth, function(req, res, next) {
+  debug('DELETE /api/gallery/:galleryID/photo/:photoID');
+
+  let tempPhoto;
+  Photo.findById(req.params.photoID)
+  .then( photo => {
+    if (photo.userID.toString() !== req.user._id.toString()) return next(createError(401, 'invalid user'));
+    tempPhoto = photo;
+    return Gallery.findById(req.params.galleryID);
+  })
+  .catch(next)
+  .then( () => {
+    let params = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: tempPhoto.objectKey
+    };
+    return s3.deleteObject(params).promise();
+  })
+  .then(() => {
+    return Photo.findByIdAndRemove(req.params.photoID);
+  })
+  .then(() => res.sendStatus(204))
+  .catch(next);
+});
